@@ -1,29 +1,18 @@
-package io.platformbuilders.cliente.usecase.request;
+package io.platformbuilders.cliente.domain.dto;
 
 import java.time.LocalDate;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-public class AlteraClienteRequest {
+public class AlteraClienteDto {
 
 	private String id;
-
-	@NotEmpty(message = "Campo 'nome' não pode estar vazio")
 	private String nome;
-
-	@NotEmpty(message = "Campo 'rg' não pode estar vazio")
 	private String rg;
-
-	@NotEmpty(message = "Campo 'cpf' não pode estar vazio")
 	private String cpf;
-
-	@NotNull(message = "Campo 'data_nascimento' não pode estar vazio")
 	private LocalDate dataNascimento;
-
 	private String telefone;
 
-	public AlteraClienteRequest(String nome, String rg, String cpf, LocalDate dataNascimento, String telefone) {
+	public AlteraClienteDto(String id, String nome, String rg, String cpf, LocalDate dataNascimento, String telefone) {
+		this.id = id;
 		this.nome = nome;
 		this.rg = rg;
 		this.cpf = cpf;
@@ -33,10 +22,6 @@ public class AlteraClienteRequest {
 
 	public String getId() {
 		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getNome() {

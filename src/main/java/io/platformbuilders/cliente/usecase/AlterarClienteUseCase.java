@@ -1,10 +1,10 @@
 package io.platformbuilders.cliente.usecase;
 
 import io.platformbuilders.cliente.usecase.request.AlteraClienteRequest;
-import io.platformbuilders.cliente.usecase.response.ClienteResponse;
+import io.platformbuilders.cliente.usecase.response.AlteraClienteResponse;
 
 public interface AlterarClienteUseCase {
 
-	ClienteResponse alterar(AlteraClienteRequest request);
+	AlteraClienteResponse alterar(AlteraClienteRequest request);
 
 }

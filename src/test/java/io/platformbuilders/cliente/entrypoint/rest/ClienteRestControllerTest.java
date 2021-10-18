@@ -4,9 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.time.LocalDate;
-import java.time.Month;
-
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.BDDMockito;
@@ -23,9 +20,8 @@ import io.platformbuilders.cliente.usecase.AtualizarClienteUseCase;
 import io.platformbuilders.cliente.usecase.CadastrarClienteUseCase;
 import io.platformbuilders.cliente.usecase.ConsultarClientePorIdUseCase;
 import io.platformbuilders.cliente.usecase.ConsultarClienteUseCase;
-import io.platformbuilders.cliente.usecase.request.AlteraClienteRequest;
-import io.platformbuilders.cliente.usecase.request.AtualizaClienteRequest;
-import io.platformbuilders.cliente.usecase.request.CadastraClienteRequest;
+import io.platformbuilders.cliente.usecase.response.AlteraClienteResponse;
+import io.platformbuilders.cliente.utils.TestUtils;
 
 @ExtendWith(MockitoExtension.class)
 class ClienteRestControllerTest {
@@ -52,7 +48,7 @@ class ClienteRestControllerTest {
 
 	@Test
 	void deveConsultarCliente() {
-		var response = controller.consultar("Joao da Silva", "11111111111", "1234567", "1980-01-01",
+		final var response = controller.consultar("Joao da Silva", "11111111111", "1234567", "1980-01-01",
 				Pageable.unpaged());
 
 		assertNotNull(response);
@@ -64,7 +60,7 @@ class ClienteRestControllerTest {
 		BDDMockito.given(consultarClienteUseCase.consultar(Mockito.any()))
 				.willThrow(new NoContentException(MENSAGEM_ERRO_BUSCA));
 
-		var exception = assertThrows(NoContentException.class,
+		final var exception = assertThrows(NoContentException.class,
 				() -> controller.consultar("Maria", null, null, null, null));
 
 		validar(exception);
@@ -72,7 +68,7 @@ class ClienteRestControllerTest {
 
 	@Test
 	void deveConsultarClientePorId() {
-		var response = controller.consultarPor("21323123123");
+		final var response = controller.consultarPor("21323123123");
 
 		assertNotNull(response);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -83,15 +79,25 @@ class ClienteRestControllerTest {
 		BDDMockito.given(consultarClientePorIdUseCase.consultarPor(Mockito.anyString()))
 				.willThrow(new NoContentException(MENSAGEM_ERRO_BUSCA));
 
-		var exception = assertThrows(NoContentException.class, () -> controller.consultarPor("987"));
+		final var exception = assertThrows(NoContentException.class, () -> controller.consultarPor("987"));
 
 		validar(exception);
 	}
 
 	@Test
 	void deveCadastrarComSucesso() {
-		var response = controller.cadastrar(new CadastraClienteRequest("Paulo", "12345", "12345678909",
-				LocalDate.of(1987, Month.JULY, 31), "(11) 99999-9999"));
+		final var response = controller.cadastrar(TestUtils.getCadastraClienteRequest());
+
+		assertNotNull(response);
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+	}
+
+	@Test
+	void deveCriarClienteComSucesso() {
+		BDDMockito.given(alterarClienteUseCase.alterar(Mockito.any()))
+				.willReturn(new AlteraClienteResponse(true, null));
+
+		final var response = controller.alterar("123", TestUtils.getAlteraClienteRequest());
 
 		assertNotNull(response);
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
@@ -99,17 +105,18 @@ class ClienteRestControllerTest {
 
 	@Test
 	void deveAlterarClienteComSucesso() {
-		var response = controller.alterar("123", new AlteraClienteRequest("Nome alteracao", "00000", "99999999999",
-				LocalDate.of(1999, Month.AUGUST, 18), null));
+		BDDMockito.given(alterarClienteUseCase.alterar(Mockito.any()))
+				.willReturn(new AlteraClienteResponse(false, null));
+
+		final var response = controller.alterar("123", TestUtils.getAlteraClienteRequest());
 
 		assertNotNull(response);
-		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
 	@Test
 	void deveAtualizarClienteComSucesso() {
-		var response = controller.atualizar("321",
-				new AtualizaClienteRequest("Atualizacao de nome", null, null, null, null));
+		final var response = controller.atualizar("321", TestUtils.getAtualizaClienteRequest());
 
 		assertNotNull(response);
 		assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());

@@ -7,16 +7,16 @@ import javax.validation.constraints.NotNull;
 
 public class CadastraClienteRequest {
 
-	@NotEmpty
+	@NotEmpty(message = "Campo 'nome' não pode estar vazio")
 	private String nome;
 
-	@NotEmpty
+	@NotEmpty(message = "Campo 'rg' não pode estar vazio")
 	private String rg;
 
-	@NotEmpty
+	@NotEmpty(message = "Campo 'cpf' não pode estar vazio")
 	private String cpf;
 
-	@NotNull
+	@NotNull(message = "Campo 'data_nascimento' não pode estar vazio")
 	private LocalDate dataNascimento;
 
 	private String telefone;

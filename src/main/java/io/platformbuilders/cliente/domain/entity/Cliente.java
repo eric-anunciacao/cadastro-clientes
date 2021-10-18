@@ -1,29 +1,19 @@
-package io.platformbuilders.cliente.usecase.request;
+package io.platformbuilders.cliente.domain.entity;
 
 import java.time.LocalDate;
+import java.time.Period;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-
-public class AlteraClienteRequest {
+public class Cliente {
 
 	private String id;
-
-	@NotEmpty(message = "Campo 'nome' não pode estar vazio")
 	private String nome;
-
-	@NotEmpty(message = "Campo 'rg' não pode estar vazio")
 	private String rg;
-
-	@NotEmpty(message = "Campo 'cpf' não pode estar vazio")
 	private String cpf;
-
-	@NotNull(message = "Campo 'data_nascimento' não pode estar vazio")
 	private LocalDate dataNascimento;
-
 	private String telefone;
 
-	public AlteraClienteRequest(String nome, String rg, String cpf, LocalDate dataNascimento, String telefone) {
+	public Cliente(String id, String nome, String rg, String cpf, LocalDate dataNascimento, String telefone) {
+		this.id = id;
 		this.nome = nome;
 		this.rg = rg;
 		this.cpf = cpf;
@@ -33,10 +23,6 @@ public class AlteraClienteRequest {
 
 	public String getId() {
 		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getNome() {
@@ -57,6 +43,14 @@ public class AlteraClienteRequest {
 
 	public String getTelefone() {
 		return telefone;
+	}
+
+	public int getIdade() {
+		if (this.dataNascimento != null) {
+			return Period.between(this.dataNascimento, LocalDate.now()).getYears();
+		} else {
+			return 0;
+		}
 	}
 
 }

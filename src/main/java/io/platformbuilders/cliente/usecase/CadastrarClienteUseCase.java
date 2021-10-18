@@ -5,6 +5,6 @@ import io.platformbuilders.cliente.usecase.response.ClienteResponse;
 
 public interface CadastrarClienteUseCase {
 
-	ClienteResponse salvar(CadastraClienteRequest request);
+	ClienteResponse cadastrar(CadastraClienteRequest request);
 
 }
